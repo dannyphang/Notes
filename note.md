@@ -73,5 +73,29 @@ Error handling
 Cleanup
 - Not rely on standard Java resource recovery to clean up streams.
 - Reason: Streams backed by physical storage (often exist `outside` i.e. files, network connections)
-
-testing
+Automating Cleanup
+- 1 method: close
+    ```
+    interface AutoClosable {
+        void close() throws Exception;
+    }
+    ```
+- Base interface of Closable interface
+    ```
+    interface Closable extends AutoClosable {
+        void close() throws IOException;
+    }
+    ```
+- Support for `try-with-resources`
+    - Automates cleanup of 1 or more `resources` (resource: any type that implements AutoClosable)
+    ```
+    public static void doTryWithResourcesMulti () {
+        try (
+            Reader reader = Helper.openReader("file1.txt")
+        ) {
+            // do something
+        } catch (IOException e) {
+            // error handling    
+        }
+    }
+    ```
